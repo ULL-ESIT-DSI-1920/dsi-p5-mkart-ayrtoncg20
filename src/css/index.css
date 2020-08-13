@@ -1,0 +1,64 @@
+body {
+    margin: 0; 
+    background: #003;
+}
+
+h1 {
+    font-family: "Press Start 2P";
+    font-size: 42px;
+    color: white;
+    text-align: center;
+}
+
+.race {
+    display: flex;
+    align-items: flex-end;
+    width: 1024px;
+    height: 700px;
+    margin: auto;
+}
+
+.road {
+    background: #777;
+    width: 1024px;
+    height: 500px;
+    border-bottom: 15px dashed white;
+    border-right: 15px solid yellow;
+
+    position: relative;
+}
+
+.buttons {
+    width: 1024px;
+    margin: 4em auto;
+    text-align: center;
+}
+
+.buttons button {
+    font-family: Montserrat;
+    font-size: 32px;
+    border: 2px solid #fff;
+    background: black;
+    padding: 8px 16px;
+    color: #fff;
+}
+
+.start:hover {
+    background: green;
+}
+
+.restart:hover {
+    background: green;
+}
+
+
+.start[disabled] {
+    background: black;
+    opacity: 0.5;
+}
+
+.restart[disabled] {
+    background: black;
+    opacity: 0.5;
+}
+

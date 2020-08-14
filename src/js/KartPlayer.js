@@ -6,6 +6,7 @@ export class KartPlayer extends HTMLElement {
     this.y = config.y;
     this.image = config.image;
     this.x = 0;
+
   }
 
   get styles() {
@@ -26,6 +27,10 @@ export class KartPlayer extends HTMLElement {
        .lose{
          opacity: 0.25;
        }
+       .item{
+         left: ${this.x_item}px;
+         top: ${this.y_item}px;
+       }
      `;
   }
 
@@ -44,6 +49,7 @@ export class KartPlayer extends HTMLElement {
 
   }
   inc() {
+    console.log(this.imagen_item)
     this.x += Math.random() * (5 - 0) + 0;;
     this.render()
   }

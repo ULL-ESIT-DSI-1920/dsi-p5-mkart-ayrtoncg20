@@ -127,5 +127,7 @@ Luego tenemos la clase restart que lo unico que hace es poner los kart a la posi
 
 Con lo visto en todo el código anterior se puede hacer una carrera de mario kart utilizando webcomponent. 
 
+He intentado hacer el reto de los items pero no me sale. 
 
+URL github pages: https://ull-esit-dsi-1920.github.io/dsi-p5-mkart-ayrtoncg20/
 

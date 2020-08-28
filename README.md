@@ -83,4 +83,49 @@ Retos
 
 2. ¿Se te ocurre alguna funcionalidad extra para el juego? Impleméntala y documéntala en el README.
 
+### Explicación
+
+Lo primero que hicimos fue ver todos los videos para entender perfectamente que era Webcomponent y poder avanzar con la práctica. Instalamos parcel como siempre hemos hecho en las anteriores prácticas y creamos los directorios correspondientes:
+
+```
+src
+   assets
+   js
+      index.js
+      kartplayer.js
+   css
+      index.css
+   index.html
+```
+
+En las siguientes imágenes podemos observar el código desarrollado para llevar a cabo la práctica, solo hemos tenido que tocar un fichero el llamado KartPlayer.js ya que el profesor nos ha dado el código restante. Vamos a comentar un poco el código desarrollado en las imágenes aunque también está comentado. 
+
+![imagen1](imagenes/index.html.png)
+
+![imagen2](imagenes/index.js.png)
+
+Comenzamos explicando un poco el código de KartPlayer.js:
+
+Declaramos una clase extendida de HTML element, así estamos haciendo uso de webcomponent. Tenemos que crear un constuctor para tener el nombre la imagen y la posicion y de cada kart. Dentro del constructor tenemos que declarar super() y this.attachShadow({ mode: 'open' });. También tenemos que declarar las variables nombre imagen, posicion y e posicion x. La funcion get styles() también nos la daba el profesor, hay algunas cosas diferentes que comentaremos a continuación:
+
+Dentro de left: pusimos la variable x creada anteriormente para saber en que posicion x se encuentra el kart en todo momento. También creamos una clase winner y una clase lose para darle estilos a los kart cuando uno ha ganado y los demás han perdido. 
+
+La funcion render tambien nos la daba el profesor, es la que va a llamar a host para pintar todos los kart en la pantalla con los estilos pertinentes. 
+
+Tenemos una funcion añadir a la carretera para añadir un nuevo nodo hijo. 
+Volvemos a llamar a la funcion render para mostrar los kart en la carretera.
+
+Comenzamos con las funciones que teníamos que crear, en este caso vamos a explicar inc(): dentro de esta funcion lo unico que se hace es cambiar el valor de x de cada kart, cada vez que llamemos a esta funcion se incrementar el valor de la x entre 0 y 5 hasta llegar a 930. 
+La funcion isWinner(): si una x de un kart ha llegado o superado 930 entonces es el ganador por lo que devolvemos un true o un false segun. 
+Ahora tenemos la funcion win y la funcion lose, las cuales se llaman cuando un kart ya ha ganado y le damos los estilos a la imagen que habiamos declarado anteriormente dentro de styles. 
+Luego tenemos la clase restart que lo unico que hace es poner los kart a la posicion 0 de nuevo para empezar otra carrera. 
+
+![imagen3](imagenes/kart1.js.png)
+![imagen4](imagenes/kart2.js.png)
+![imagen5](imagenes/index.css1.png)
+![imagen6](imagenes/index.css2.png)
+
+Con lo visto en todo el código anterior se puede hacer una carrera de mario kart utilizando webcomponent. 
+
+
 

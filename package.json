@@ -6,10 +6,20 @@
   "dependencies": {
     "parcel-bundler": "^1.12.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "prettier": "^2.1.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build ./src/index.html --public-url /dsi-p3-synth-ayrtoncg20/ -d build",
+    "build": "parcel build ./src/index.html --public-url /dsi-p5-mkart-ayrtoncg20/ -d build",
     "deploy": "gh-pages -d build"
   },
   "repository": {

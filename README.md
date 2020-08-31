@@ -251,8 +251,6 @@ Ahora vamos a comentar la clase KartPlayer.
 
 Lo primero que hacemos es definir una clase que extiende de HTML para hacer uso de WebComponent. 
 
-![imagen3](imagenes/kart1.js.png)
-![imagen4](imagenes/kart2.js.png)
 ![imagen5](imagenes/index.css1.png)
 ![imagen6](imagenes/index.css2.png)
 
@@ -367,11 +365,25 @@ Ahora vamos con las funciones ganar y perder. Cuando un kart gana se llama a la 
   }  
 ```
 
+Por último tenemos la función restart()  la cual sirve para que los kart tengan la propiedad x a 0 para que se pongan al principio de nuevo. 
+
+```
+restart () { // para restablecer la carrera solo ponemos la x de cada kart a 0 y llamamos a render
+    this.x = 0
+    this.render()
+  }
+```
+
+En las siguientes imagenes podemos observar el codigo desarrollado:
 
 
-  
+![imagen3](imagenes/kart1.js.png)
+![imagen4](imagenes/kart2.js.png)
+
+Por último para que webcomponent funcione tenemos que asociar la etiqueta HTML a la clase KartPlayer.
 
 
+customElements.define('kart-player', KartPlayer) // Asocia la etiqueta HTML a la clase
 
 
 He intentado hacer el reto de los items pero no me sale. 

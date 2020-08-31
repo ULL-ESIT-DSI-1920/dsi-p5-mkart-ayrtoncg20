@@ -85,7 +85,31 @@ Retos
 
 ### Explicación
 
-Lo primero que hicimos fue ver todos los videos para entender perfectamente que era Webcomponent y poder avanzar con la práctica. Instalamos parcel como siempre hemos hecho en las anteriores prácticas y creamos los directorios correspondientes:
+Antes de comenzar la práctica como hemos visto en prácticas anteriores, creamos el directorio de trabajo y tenemos que hacer uso de git por lo que utilizamos el comando:
+
+```
+$ git init
+```
+
+Para iniciar un repositorio. Para conectar nuestro directorio con el respositorio del github utilizamos el siguiente comando:
+
+```
+$ git remote add origin <ruta_ssh>
+```
+
+A continuación creamos el package.json con el comando:
+
+```
+$ npm init -y
+```
+
+Y por último, instalamos parcel de forma local:
+
+```
+$ npm install -D parcel-bundler
+```
+
+Lo primero que hicimos fue ver todos los videos para entender perfectamente que era Webcomponent y poder avanzar con la práctica. Creamos los directorios correspondientes.
 
 ```
 src
@@ -98,27 +122,134 @@ src
    index.html
 ```
 
-En las siguientes imágenes podemos observar el código desarrollado para llevar a cabo la práctica, solo hemos tenido que tocar un fichero el llamado KartPlayer.js ya que el profesor nos ha dado el código restante. Vamos a comentar un poco el código desarrollado en las imágenes aunque también está comentado. 
+Comenzamos explicando el index.html, como en las anteriores prácticas he creado un titulo para que tenga titulo la práctica. Dentro del body he creado un texto el cual va a salir por pantalla definiendo de que va a tratar la práctica, también declaramos un div llamado race y un div llamado road. Despúes declaramos una clase boton que contendra el boton start y el bton restart. 
+
+```
+<h1>Mario Kart</h1>
+    <!--Creamos el titulo de la página-->
+    <div class="race">
+        <!--Creamos un div para la carrera-->
+        <div class="road"></div>
+        <!--Creamos un div para la carretera-->
+    </div>
+    <div class="buttons">
+        <!-- Creamos un div para los botones en este caso start y restarts-->
+        <button class="start">Start</button>
+        <button class="restart">Restart</button>
+    </div>
+```
+
+En la siguiente imagen podemos observar el código:
 
 ![imagen1](imagenes/index.html.png)
 
+Ahora nos dirigimos al index.js archivo dado por el profesor que vamos a explicar a continuación:
+
+Lo primero que tenemos que hacer es importar las imagenes de los kart asi como la clase KartPlayer.
+
+```
+import players from '../assets/kart-*.png' // importamos los kart como players
+import { KartPlayer } from './KartPlayer.js' // importamos la clase Kartplayer
+```
+
+Comenzamos creado constantes para los dos botones, una para el start y otra para el restart. 
+También creamos una constante para la carretera. 
+Creamos un array para meter los kart
+Por ultimo creamos una variable timer a null. 
+
+```
+const startButton = document.querySelector('.start') // creamos una constante para guardar el boton start
+const restartButton = document.querySelector('.restart') // Creamos una constante para guardar el boton restart
+const road = document.querySelector('.road') // Creamos una constante para la carretera
+const karts = [] // array para los kart
+let timer = null
+```
+
+Comenzamos creando un for donde se va a recorrer el nombre y la imagen de cada objeto players al cual le vamos a decir que dentro de config esta la imagen y la posicion y de los kart. 
+```
+for (const [name, image] of Object.entries(players)) { // recorremos el objeto player que tiene el nombre del kart
+  const config = {
+    image,
+    y: karts.length * 64 // posicion y de cada kart
+  }
+```
+
+A continuación creamos un objeto kart que le pasamos por parametro el nombre del kart y el array config que contiene la imagen y la posicion y del kart. 
+
+```
+const kart = new KartPlayer(name, config) // Creamos un nuevo kart con el nombre y un array de configuracion donde esta la imagen y la posicion y
+```
+
+Añadimos el kart a la carretera con la funcion addToRoad definida en la clase KartPlayer y le pasamos por parametro la constante road que tendra la clase road creada en el html. 
+
+```
+kart.addToRoad(road) // añadimos el kart a la carretera
+```
+
+Por último metemos el kart dentro del array creado al comienzo del fichero. 
+
+```
+karts.push(kart) // Metemoe el kart en el array de kart
+```
+
+Comenzamos a explicar las funciones:
+
+```
+const startRace = () => { // Funcion para comenzar la carrera
+  timer = setInterval(() => startIterarion(), 1000 / 60)
+  startButton.disabled = true
+  restartButton.disabled = true
+}
+
+```
+Funcion para comenzar la carrera, dicha funcion llama a starIteration que la explicaremos a continuación, los botones los ponemos deshabilitados para que el usuario no pueda pulsar mientras se esta desarrollando la carrera. 
+
+```
+const endRace = () => { // funcion para acabar la carrera
+  clearInterval(timer)
+  karts.forEach(kart => (kart.isWinner() ? kart.win() : kart.lose()))
+  restartButton.disabled = false
+}
+
+```
+
+La función endRace para acabar la carrera, se hace un for para recorrer todos los karts del array, se llama a isWinner que es una función declarada dentro de la clase KartPlayer para saber si un kart ha ganado o no, como sabesmo eso, si la x del kart ha llegado a 930 entonces el kart ha ganado la carrera. Luego se hace una especie de if para saber si ese kart es el ganador o es uno de los perdedores para darle estilos. 
+El boton de restablecer se pone visible otra vez para poder restablecer la carrera una vez ya ha sido terminada. 
+
+```
+const restartRace = () => { // funcion para restablecer la carrera
+  karts.forEach(kart => kart.restart())
+  startButton.disabled = false
+}
+
+```
+
+Funcion para restablecer la carrera, se llama a una funcion restar definida en kartplayer que pone la variable x de todos los kart a 0 para empezar otra vez en la posicion 0. 
+El boton de estar se pone visible para poder iniciar de nuevo la carrera. 
+
+```
+
+const startIterarion = () => { // funcion para avanzar los kart en cada iteracion
+  karts.forEach(kart => kart.inc())
+  if (karts.some(kart => kart.isWinner())) endRace()
+}
+
+```
+
+Función para mover los karts de posicion, llamamos a inc() que es una funcion definida dentro de kartplayer que lo que hace es sumarle una cantidad a la x de cada kart entre 0 y 5 aleatoriamente para que el kart vaya cambiando su posicion x y se vaya moviendo hacia la meta. 
+
+Por último si le damos a startButton llamamos a la funcion comenzar carrera, mientras que, si le damos a restartButton llamamos a la funcion restart carrera. 
+
+```
+startButton.onclick = () => startRace() // si le damos click a start llamamos a la funcion que empieza la carrera
+restartButton.onclick = () => restartRace()
+```
+
 ![imagen2](imagenes/index.js.png)
 
-Comenzamos explicando un poco el código de KartPlayer.js:
+Ahora vamos a comentar la clase KartPlayer.
 
-Declaramos una clase extendida de HTML element, así estamos haciendo uso de webcomponent. Tenemos que crear un constuctor para tener el nombre la imagen y la posicion y de cada kart. Dentro del constructor tenemos que declarar super() y this.attachShadow({ mode: 'open' });. También tenemos que declarar las variables nombre imagen, posicion y e posicion x. La funcion get styles() también nos la daba el profesor, hay algunas cosas diferentes que comentaremos a continuación:
-
-Dentro de left: pusimos la variable x creada anteriormente para saber en que posicion x se encuentra el kart en todo momento. También creamos una clase winner y una clase lose para darle estilos a los kart cuando uno ha ganado y los demás han perdido. 
-
-La funcion render tambien nos la daba el profesor, es la que va a llamar a host para pintar todos los kart en la pantalla con los estilos pertinentes. 
-
-Tenemos una funcion añadir a la carretera para añadir un nuevo nodo hijo. 
-Volvemos a llamar a la funcion render para mostrar los kart en la carretera.
-
-Comenzamos con las funciones que teníamos que crear, en este caso vamos a explicar inc(): dentro de esta funcion lo unico que se hace es cambiar el valor de x de cada kart, cada vez que llamemos a esta funcion se incrementar el valor de la x entre 0 y 5 hasta llegar a 930. 
-La funcion isWinner(): si una x de un kart ha llegado o superado 930 entonces es el ganador por lo que devolvemos un true o un false segun. 
-Ahora tenemos la funcion win y la funcion lose, las cuales se llaman cuando un kart ya ha ganado y le damos los estilos a la imagen que habiamos declarado anteriormente dentro de styles. 
-Luego tenemos la clase restart que lo unico que hace es poner los kart a la posicion 0 de nuevo para empezar otra carrera. 
+Lo primero que hacemos es definir una clase que extiende de HTML para hacer uso de WebComponent. 
 
 ![imagen3](imagenes/kart1.js.png)
 ![imagen4](imagenes/kart2.js.png)
@@ -126,6 +257,122 @@ Luego tenemos la clase restart que lo unico que hace es poner los kart a la posi
 ![imagen6](imagenes/index.css2.png)
 
 Con lo visto en todo el código anterior se puede hacer una carrera de mario kart utilizando webcomponent. 
+```
+export class KartPlayer extends HTMLElement { // Hacemos uso de web component para definir la clase Kartplayer
+  constructor (name, config) { // creamos un constructor con el nombre y la configuracion del kart
+    super() // La palabra clave super es usada para acceder y llamar funciones del padre de un objeto
+    this.attachShadow({ mode: 'open' })
+    this.name = name // Este nombre es el nombre que se le pasa por parametro
+    this.y = config.y // Esta y es la y que se le pasa por parametro
+    this.image = config.image // Esta imagen es la imagen que se le pasa por parametro
+    this.x = 0 // Declaramos una variable x ya que el kart tiene variable x e y para saber en que posicion esta exactamente
+  }
+```
+Dentro de esta clase declaramos un constructor que tiene el nombre del kart asi como un array config que tiene la imagen y la posicion y del kart. 
+Tenemos que declarar super() para poder hacer uso de HTMLElement si no da error. 
+Declaramos propiedades nombre, y, imagen y x, que van a ser las principales, la posicion y, la posicion x, la imagen y el nombre del kart. 
+
+La función get styles() fue dada por el profesor, la cual tiene una serie de estilos para los kart, asi como su posición x e y definida por las propiedades x e y definidas en el constructor. También tenemos la clase .winner y la clase .lose clases que se llamaran cuando usemos las funciones de ganar y perder (solo es para dar estilos)
+
+```
+get styles () {
+    return `
+       :host {
+         position: absolute;
+         display: inline-block;
+         left: ${this.x}px;
+         top: ${this.y}px;
+         transform: translateX(var(--x)) translateY(var(--y));
+         transition: transform 10s;
+         will-change: transform;
+       }
+       .winner{
+         filter: drop-shadow(0 0 10px yellow);
+         z-index: 5;
+       }
+       .lose{
+         opacity: 0.25;
+       }
+       .item{
+         left: ${this.x_item}px;
+         top: ${this.y_item}px;
+       }
+     `
+  }
+```
+
+La función render() añade a shadowRoot la siguiente información:
+
+- Los estilos definidos por get styles
+- item kart
+- imagen del kart
+
+```
+ render () {
+    this.shadowRoot.innerHTML = `
+          <style>${this.styles}</style>
+          <item-kart></item-kart>
+          <img src="${this.image}" alt="${this.name}">
+        `
+  }
+```
+
+A continuación tenemos la función addToRoad a la cual se le pasa por parametro el html creado al principio que luego lo cogimos con el javascript. Hacemos uso de appendchild para añadir todo a la carretera. Y por último llamamos a render para poder ver los kart por pantalla. 
+
+```
+ addToRoad (road) {
+    road.appendChild(this) // nuevo nodo hijo
+    this.render()
+  }
+```
+
+Ahora vamos con la función incrementar, como hemos dicho anteriormente, lo unico que hace esta función es agregarle una cantidad a la variable x de cada kart, para que el kart vaya avanzando. Llamamos a render para ir viendo los avances de los kart. 
+
+```
+ inc () { // funcion para incrementar la posicion x de los karts
+    this.x += Math.random() * (5 - 0) + 0 // le añadimos un valor aleatorio entre 0 y 5 a la posicion x del kart
+    this.render() // llamamos a la funcion render para pintar los kart con las nuevas posiciones
+  }
+  ```
+  
+La función isWinner siempre devuelve un false hasta que la variable x de un kart no iguale o supere la cantidad de 930 que devolverá un true
+
+```
+  isWinner () { // La funcion is winner comprueba si un kart en la posicion x ha llegado a 930 y lo da por ganador
+    if (this.x >= 930) {
+      return true
+    } else {
+      return false
+    }
+  }
+```
+
+Ahora vamos con las funciones ganar y perder. Cuando un kart gana se llama a la clase winner que es la encargarda de darle estilos a la imagen del kart, cuando un kart pierde se llama a la funcion lose y a la clase lose que es la que le va a dar estilos a los kart perdedores. 
+
+```
+  win () { // Se llama a la funcion win por lo que esto le da unos estilos winner creados antes y volvemos a mostrar todo
+    this.shadowRoot.innerHTML = `
+          <style>${this.styles}</style>
+          <item-kart></item-kart>
+          <img class="winner" src="${this.image}">
+        `
+  }
+
+  lose () { // Se llama a la funcion lose por lo que esto le da unos estilos lose creados antes y volvemos a mostrar todo
+    this.shadowRoot.innerHTML = `
+          <style>${this.styles}</style>
+          <item-kart></item-kart>
+          <img class="lose" src="${this.image}">
+        `
+  }  
+```
+
+
+
+  
+
+
+
 
 He intentado hacer el reto de los items pero no me sale. 
 
